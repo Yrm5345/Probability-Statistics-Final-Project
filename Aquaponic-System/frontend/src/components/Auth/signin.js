@@ -3,11 +3,37 @@ import { Link } from "react-router-dom";
 import "./authForm.css";
 
 const SignInForm = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const userData = {
+      username,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "An error occurred");
+      }
+
+      const data = await response.json();
+      console.log("Success:", data);
+    } catch (error) {
+      console.error("Error:", error.message);
+      setError(error.message);
+    }
   };
 
   return (
@@ -17,9 +43,9 @@ const SignInForm = () => {
         <form onSubmit={handleSubmit}>
           <label>Email:</label>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <label>Password:</label>
@@ -31,6 +57,7 @@ const SignInForm = () => {
           />
           <button type="submit">Sign In</button>
         </form>
+        {error && <p className="error-message">{error}</p>}
         <p>
           Don't have an account? <Link to="/sign-up">Sign Up</Link>
         </p>

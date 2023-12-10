@@ -2,44 +2,24 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
+from flask_cors import CORS
+import flask_login 
 
 db = SQLAlchemy()
 migrate = Migrate()
 
 def create_app():
-    """
-    Create and configure the Flask application.
-
-    
-
-    Overview:
-    - Initializes a Flask app.
-    - Configures the app using the Config class.
-    - Initializes the SQLAlchemy database.
-    - Sets up database migrations using Flask-Migrate.
-    - Creates database tables.
-    - Registers blueprints for modularization.
-
-    Usage:
-    - Use this function to create the Flask app instance for your project.
-
-    Dependencies:
-    - Flask
-    - Flask-SQLAlchemy
-    - Flask-Migrate
-    """
+   
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(Config)
 
     db.init_app(app)
     migrate.init_app(app, db)
 
-    with app.app_context():
-        try:
-            # Create the database tables
-            db.create_all()
-        except Exception as e:
-            print(f"Error creating database tables: {str(e)}")
+    login_manager = flask_login.LoginManager(app)
+    login_manager.login_view = 'auth.login'
+    
 
     # Register blueprints
     from app.main import main_bp
@@ -56,5 +36,13 @@ def create_app():
 
     from app.auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
+
+    with app.app_context():
+        try:
+            # Create the database tables
+            db.create_all()
+            print("All tables created")
+        except Exception as e:
+            print(f"Error creating database tables: {str(e)}")
 
     return app

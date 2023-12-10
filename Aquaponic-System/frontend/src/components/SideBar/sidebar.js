@@ -19,13 +19,7 @@ import "./sidebar.css";
 const SideBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+ 
 
   return (
     <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
