@@ -1,6 +1,13 @@
 from flask import render_template
 from . import plants_blueprint
 
+
+# @plants_blueprint.route('/')
+# def HOME():
+    
+#     # logic to fetch and display plant information
+    
+#     return "<P>hEKKO</P>"
 @plants_blueprint.route('/plants')
 def view_plants():
     

@@ -2,14 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
+
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     """
     Create and configure the Flask application.
 
-    Returns:
-        Flask: The configured Flask app.
+    
 
     Overview:
     - Initializes a Flask app.
@@ -22,8 +23,6 @@ def create_app():
     Usage:
     - Use this function to create the Flask app instance for your project.
 
-    
-
     Dependencies:
     - Flask
     - Flask-SQLAlchemy
@@ -33,16 +32,18 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    migrate.init_app(app, db)
 
     with app.app_context():
-        # Create the database tables
-        db.create_all()
+        try:
+            # Create the database tables
+            db.create_all()
+        except Exception as e:
+            print(f"Error creating database tables: {str(e)}")
 
-        
-
-    # Register blueprints 
-    from app.main import main_blueprint
-    app.register_blueprint(main_blueprint)
+    # Register blueprints
+    from app.main import main_bp
+    app.register_blueprint(main_bp)
 
     from app.equaponic import equaponic_blueprint
     app.register_blueprint(equaponic_blueprint)
@@ -55,7 +56,5 @@ def create_app():
 
     from app.auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
-
-    
 
     return app

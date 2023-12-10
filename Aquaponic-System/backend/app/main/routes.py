@@ -1,6 +1,7 @@
 from flask import render_template
-from . import main_blueprint
+from . import main_bp
 
-@main_blueprint.route('/')
+
+@main_bp.route('/')
 def home():
     return "<p>Hello</p>"
