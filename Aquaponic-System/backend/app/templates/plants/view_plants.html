@@ -1,0 +1,12 @@
+<html>
+<body>
+<table>
+{% for item in plants %}
+<tr>
+<td><a href="{{ url_for('plants.view_plant', plant_id=item['id']) }}">{{ item['name'] }}</a></td>
+<td>{{ item['info'] }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
