@@ -1,0 +1,17 @@
+.header-container {
+  background: linear-gradient(135deg, #0d47a1, #009688, #43a047);
+  color: white;
+  text-align: center;
+  height: 2.5em;
+  margin: 10px;
+  border-radius: 10px;
+  display: flex;
+}
+
+.header-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
